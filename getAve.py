@@ -27,7 +27,7 @@ class Solution(object):
         
         # add the data to the proper bucket 
         timestamp = int(time.time() // 1)
-        print timestamp 
+        print "addData:", value, " at", timestamp 
         if self.count == 0:
             self.buckets[self.bucket_index] = [timestamp, value, 1]  
             self.total = value 
@@ -79,6 +79,7 @@ class Solution(object):
         :rtype value: float 
         """
         timestamp = int(time.time() // 1)
+        print "getAverage at time:", timestamp
         last_timestamp = self.buckets[self.bucket_index][0]
         diff = (timestamp - last_timestamp) // 1
         if diff == 0:
@@ -114,7 +115,9 @@ class Solution(object):
         
         
         
-        
+"""
+Unit Test
+"""       
 obj = Solution(2)
 obj.addData(15)
 obj.addData(20)
@@ -141,3 +144,34 @@ time.sleep(1.0)
 print obj.getAverage()
 time.sleep(1.0)
 print obj.getAverage()
+
+
+"""
+Execution Results:
+addData: 15  at 1525301366
+addData: 20  at 1525301366
+getAverage at time: 1525301366
+17.5
+addData: 20  at 1525301368
+addData: 21  at 1525301368
+addData: 22  at 1525301369
+getAverage at time: 1525301369
+21.0
+getAverage at time: 1525301371
+here
+0
+addData: 20  at 1525301371
+addData: 21  at 1525301371
+addData: 22  at 1525301372
+addData: 28  at 1525301372
+getAverage at time: 1525301372
+22.75
+addData: 33  at 1525301373
+addData: 20  at 1525301373
+getAverage at time: 1525301373
+25.75
+getAverage at time: 1525301374
+26.5
+getAverage at time: 1525301375
+0
+"""
