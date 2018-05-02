@@ -18,7 +18,7 @@ class Solution(object):
         # Initialize each bucket item, [timestamp, totalValue, count]
         for i in range(self.interval):
             self.buckets.append([0, 0, 0])
-        
+    
     
     def addData(self, value):
         """
@@ -38,32 +38,25 @@ class Solution(object):
         last_timestamp = self.buckets[self.bucket_index][0]
         diff = timestamp - last_timestamp
         if diff == 0:  
-            
             self.buckets[self.bucket_index][1] += value
             self.buckets[self.bucket_index][2] += 1
             self.total += value
             self.count += 1
-            
         elif diff >= self.interval: #exceed
-            
             self.bucket_index = 0
-            for i in range(self.interval):
-                self.buckets[i] = [0, 0, 0]
-                
-            self.buckets[self.bucket_index][0] = timestamp  # set the timetampe
-            self.buckets[self.bucket_index][1] = value      # set the total 
-            self.buckets[self.bucket_index][2] = 1          # set the count
-            self.total = value 
+            self.buckets[self.bucket_index] = [timestamp, value, 1]
+	    self.total = value 
             self.count = 1
-
         else:
             # If add is often, this forloop will be executed at most 1
             for i in range(1, diff + 1):
                 # get the actually index 
                 index = (self.bucket_index + i) % self.interval
+		
                 # remove out of data value, though maybe 0
-                self.total -= self.buckets[index][1]
-                self.count -= self.buckets[index][2]
+		if last_timestamp - self.buckets[index][0] < self.interval: 
+                    self.total -= self.buckets[index][1]
+                    self.count -= self.buckets[index][2]
                 # reset the buffer 
                 self.buckets[index] = [last_timestamp + i, 0, 0]
                 
@@ -86,25 +79,19 @@ class Solution(object):
             return (self.total * 1.0 / self.count ) if self.count > 0 else 0
         elif diff >= self.interval:
             self.bucket_index = 0
-
-            for i in range(self.interval):
-                self.buckets[i] = [0, 0, 0]
-            
             self.buckets[self.bucket_index][0] = timestamp
-                
             self.total = 0 
             self.count = 0
-            print "here"
             return 0
             
-        
         # If add is often, this forloop will be executed at most 1
         for i in range(1, diff + 1): 
             # get the actually index 
             index = (self.bucket_index + i) % self.interval
             # remove out of data value, though maybe 0
-            self.total -= self.buckets[index][1]
-            self.count -= self.buckets[index][2]
+	    if last_timestamp - self.buckets[index][0] < self.interval:
+                self.total -= self.buckets[index][1]
+                self.count -= self.buckets[index][2]
             # reset the buffer 
             self.buckets[index] = [last_timestamp + i, 0, 0]
         
