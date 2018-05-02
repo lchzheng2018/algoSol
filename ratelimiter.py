@@ -11,15 +11,16 @@ class Solution(object):
         """
         :type n: int
         """
-        self.limit = n
+        self.setLimit(n)
         
     
     def setLimit(self, n):
         """
         :type n: int
         """
-        if n <= 0:
+        if n < 0:
             print "invalid input"
+	    return 
         self.limit = n
         self.start = 0
         self.bucket = []
