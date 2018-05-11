@@ -2,6 +2,8 @@
 # A simple version of getAve of last n * unit seconds. #
 # It will be n minutes if "unit" is set to 60.         #
 # For test purpose, the default unit is 1 second.      #
+#   O(1) addData                                       #
+#   O(n) getAverag                                     #
 ########################################################
 import time 
 
