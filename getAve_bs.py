@@ -18,7 +18,6 @@ class bItem(object):
         self.ts = timestamp
         self.total = total
         self.count = count
-        
 
 class Solution(object):
     def __init__(self, n, unit=1):
@@ -26,7 +25,6 @@ class Solution(object):
         :type n: int -the time window lenght
         :type unit: int - the interval of each windown item
         """
-        
         self.tLen = n
         self.unit = unit
         
@@ -36,12 +34,10 @@ class Solution(object):
         for i in range(n + 1):
             self.buckets.append(bItem(0, 0, 0))
         
-        
     def addData(self, val):
         """
         :type val: int
         """
-        
         curTime = time.time()
         cur = int(curTime) // self.unit
         
@@ -65,9 +61,6 @@ class Solution(object):
             self.buckets[nextIndex].total = self.buckets[self.index].total + val
             self.buckets[nextIndex].count = self.buckets[self.index].count + 1
             self.index = nextIndex
-        #print "index, total, count", self.index, self.buckets[self.index].total, self.buckets[self.index].count
-        
-    
     
     def getAverage(self):
         """
@@ -81,38 +74,26 @@ class Solution(object):
         cur = int(curTime) // self.unit
         last = self.buckets[self.index].ts
         
-        
         # No add in the last n window
         if cur - last >= self.tLen:
             return 0
           
         pivotTS = cur - self.tLen
         pivotIndex = -1
-        
-        #print "cur, last, pivotTS", cur, last, pivotTS
-        #print self.buckets
-      
         endIndex = (self.index - 1) % (self.tLen + 1)
         if self.buckets[endIndex].ts <= pivotTS:
             pivotIndex = endIndex
-            
         startIndex = (self.index - (last - pivotTS)) % (self.tLen + 1)
-        
         if self.buckets[startIndex].ts == pivotTS:
             pivotIndex = startIndex
         
-    
+        # Binary search to find  the latest bucket with ts <= cur - n   
         start = 0
         end = last + self.tLen - cur 
-        #print "start, end, startIndex", start, end, startIndex
-        # Binary search to find  the latest bucket with ts <= cur - n   
         while pivotIndex == -1 and start <= end:
             mid = (start + end) / 2
             index = (startIndex + mid) % (self.tLen + 1)
-            #print "search index", index
             nextIndex = (index + 1) % (self.tLen + 1)
-            
-            # According to the previous condition, there should be always a point
             if self.buckets[index].ts > pivotTS:
                 end = mid - 1
             elif self.buckets[index].ts == pivotTS:
@@ -124,19 +105,14 @@ class Solution(object):
             else:
                 start = mid + 1
     
-        #print "startIndex, pivotIndex", startIndex, pivotIndex
-        #self.printBuckets()
         total = self.buckets[self.index].total - self.buckets[pivotIndex].total 
         count = self.buckets[self.index].count -  self.buckets[pivotIndex].count
-        
         return total * 1.0 / count if count > 0 else 0
     
-  
     def printBuckets(self):
         print "last Index:", self.index
         for i in range(len(self.buckets)):
             print "Index i:", i, self.buckets[i].ts, self.buckets[i].total, self.buckets[i].count
-      
         
 """
 Unit Test
