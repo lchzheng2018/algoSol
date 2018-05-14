@@ -102,10 +102,10 @@ class Solution(object):
     count = self.buckets[pivot].count - self.buckets[targetIndex].count
     return total * 1.0 / count if count > 0 else 0
     
-    def printBuckets(self):
-      print "last Index:", self.index
-      for i in range(len(self.buckets)):
-        print "Index i:", i, self.buckets[i].ts, self.buckets[i].total, self.buckets[i].count 
+  def printBuckets(self):
+    print "last Index:", self.index
+    for i in range(len(self.buckets)):
+      print "Index i:", i, self.buckets[i].ts, self.buckets[i].total, self.buckets[i].count 
    
 """ 
 Unit Test
